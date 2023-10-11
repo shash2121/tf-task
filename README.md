@@ -28,4 +28,6 @@ Update [17 Aug]:
 - Removed the tfvars for lifecycle management for EC2.
 - Added AWS backup, which will be applied to all resource having tag "Snapshot:true"
 
+
+
 Note: In terraform.tfvars line 86, replace the instance ID with ID of a running instance, then entire code will work fine.
