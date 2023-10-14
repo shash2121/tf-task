@@ -40,6 +40,6 @@ Update [14 Oct]:
 - Created EFS and its security group with the required inbound rules. It has mount targets in all the availability zones in the us-east-1 region, so instance launched in any AZ can have EFS mounted on it.
 
 - Created ASG for the linux instances.
-- The user-date specified in the ASG will autmatically mount the EFS on the instances in the 
+- The user-data specified in the ASG will autmatically mount the EFS on the instances in the 
 /home/ubuntu/efs directory.
 - This process is automated which means if additional instances are added to ASG, then also EFS will be mounted on them.
