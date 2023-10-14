@@ -44,3 +44,17 @@ variable "iam_policy" {
 variable "backup" {
   default = null
 }
+
+variable "route53" {
+  default = null
+}
+
+variable "r53_record" {
+  default = null
+}
+
+variable "asg_linux" {
+  default = null
+}
+
+variable "efs" {}

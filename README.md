@@ -19,6 +19,10 @@ Following resources are created:
 - windows patch manager with baseline
 - s3 bucket
 - IAM role to be attached to ec2 instances
+- Route53 public and private zone.
+- Records inside these zones.
+- ASG for linux.
+- EFS
 
 - Note:
   Storing the state file in s3 bucket "s3-statefile-backup" mentioned in appbuild/backend-s3
@@ -28,6 +32,12 @@ Update [17 Aug]:
 - Removed the tfvars for lifecycle management for EC2.
 - Added AWS backup, which will be applied to all resource having tag "Snapshot:true"
 
+Update [14 Oct]:
+- Created route53 module which can create public/private hosted zones.
+- Also, DNS records can be created in these zones by specifying the zone type as either private/ public.
+- Created EFS and its security group with the required inbound rules. It has mount targets in all the availability zones in the us-east-1 region, so instance launched in any AZ can have EFS mounted on it.
 
-
-Note: In terraform.tfvars line 86, replace the instance ID with ID of a running instance, then entire code will work fine.
+- Created ASG for the linux instances.
+- The user-date specified in the ASG will autmatically mount the EFS on the instances in the 
+/home/ubuntu/efs directory.
+- This process is automated which means if additional instances are added to ASG, then also EFS will be mounted on them.

@@ -15,7 +15,7 @@ module "target_group" {
     application_port = var.tg.application_port
     application_health_check_target = var.tg.application_health_check_target
     vpc_id = var.tg.vpc_id
-    instance_id = var.tg.instance_id
+    #instance_id = var.tg.instance_id
 }
 
 module "listener_rule" {

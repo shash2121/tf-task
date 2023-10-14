@@ -1,18 +1,36 @@
 region = "us-east-1"
 
-linux = {
-    instance_type = "t3a.large"
-    assoc_pub_ip = true
-    subnet_id = "subnet-0b51a3915c85da362"
-    key = "tf-key"
-    volume_size = 20
+# linux = {
+#     instance_type = "t3a.large"
+#     assoc_pub_ip = true
+#     subnet_id = "subnet-0b51a3915c85da362"
+#     key = "tf-key"
+#     volume_size = 20
+#     ec2_tag = "AMAZON_LINUX_2"
+# }
+
+asg_linux = {
+    launch_template_name = "linux-lt"
+    volume_size = 8
+    volume_type = "gp2"
+    delete_on_termination = true
+    instance_type = "t2.medium"
+    autoscaling_group_name = "linux-asg"
+    max_size = 2
+    min_size = 1
+    desired_capacity = 2
+    subnet_ids = ["subnet-0b7447c4751750d81","subnet-00c46563777fb4927","subnet-0c6e8aac3d6fd3584",
+    "subnet-0910c00c3e8ecb0b6","subnet-0b51a3915c85da362","subnet-0b84218cf1706bc0f"]
     ec2_tag = "AMAZON_LINUX_2"
+    scaling_policy_name = "linux-scaling-policy"
+    threshold_value = 80.0
+    key_name = "tf-key"
 }
 
 windows = {
     instance_type = "t3a.large"
     assoc_pub_ip = true
-    subnet_id = "subnet-0b51a3915c85da362"
+    subnet_id = "subnet-0c6e8aac3d6fd3584"
     key = "tf-key"
     volume_size = 30
     ec2_tag = "WINDOWS"
@@ -68,7 +86,7 @@ s3 = {
 alb = {
     alb_name = "test-alb"
     internal = false
-    subnets_id = ["subnet-0b84218cf1706bc0f","subnet-0b51a3915c85da362","subnet-00c46563777fb4927"]
+    subnets_id = ["subnet-0b7447c4751750d81","subnet-00c46563777fb4927","subnet-0c6e8aac3d6fd3584"]
     vpc_id = "vpc-09166d3ab75915302"
     alb_sg_ingress = {
                 ingress1 = {from="80", to="80", protocol="tcp", cidr_block="0.0.0.0/0", description="HTTP"}
@@ -81,9 +99,9 @@ alb = {
 tg = {
     application_name = "sample-app"
     application_port = 80
-    application_health_check_target = "/health"
+    application_health_check_target = "/"
     vpc_id = "vpc-09166d3ab75915302"
-    instance_id = "i-061c9863b6f1fe842"
+    #instance_id = "i-061c9863b6f1fe842"
 }
 
 listener_rule = {
@@ -152,3 +170,25 @@ linux_patch = {
     baseline_name = "Custom-amzn-linux-Baseline"
 }
 
+route53 = {
+    public_zone_name = "techno.com"
+    private_zone_name = "techno.com"
+    vpc_id = "vpc-09166d3ab75915302"
+}
+
+r53_record = {
+    zone_type = "public"
+    subdomain = "dev"
+    domain = "techno.com"
+    record_type = "A"
+    ttl = "30"
+    records = ["10.0.0.1"]
+}
+
+########### EFS #################
+efs = {
+    efs_name = "test-efs"
+    vpc_id = "vpc-09166d3ab75915302"
+    subnet_ids = ["subnet-0b7447c4751750d81","subnet-00c46563777fb4927","subnet-0c6e8aac3d6fd3584",
+    "subnet-0910c00c3e8ecb0b6","subnet-0b51a3915c85da362","subnet-0b84218cf1706bc0f"]
+}

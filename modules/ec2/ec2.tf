@@ -5,7 +5,7 @@ resource "aws_instance" "ec2" {
   key_name = var.key
   associate_public_ip_address = var.assoc_pub_ip
   iam_instance_profile = var.iam_instance_profile
-  user_data = "${data.template_file.user_data.rendered}"
+  #user_data = "${data.template_file.user_data.rendered}"
   subnet_id = var.subnet_id
    root_block_device {
     volume_size = var.volume_size

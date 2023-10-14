@@ -3,18 +3,43 @@ module "iam_instance_profile" {
   ec2_policy = var.iam_policy.ec2_policy
 }
 
-module "linux_ec2" {
-  depends_on = [ module.iam_instance_profile]
-  source = "../modules/ec2"
-    instance_type = var.linux.instance_type
-    ami_id = data.aws_ami.amazon_linux_2.id #fetching ubuntu AMI
-    assoc_pub_ip = var.linux.assoc_pub_ip
-    sg_id = module.app-sg.sg_id
-    subnet_id = var.linux.subnet_id
-    key = var.linux.key
-    volume_size = var.linux.volume_size
-    ec2_tag = var.linux.ec2_tag
-    iam_instance_profile = module.iam_instance_profile.iam_instance_profile
+# module "linux_ec2" {
+#   depends_on = [ module.iam_instance_profile]
+#   source = "../modules/ec2"
+#     instance_type = var.linux.instance_type
+#     ami_id = data.aws_ami.amazon_linux_2.id #fetching AMZN linux AMI
+#     assoc_pub_ip = var.linux.assoc_pub_ip
+#     sg_id = module.app-sg.sg_id
+#     subnet_id = var.linux.subnet_id
+#     key = var.linux.key
+#     volume_size = var.linux.volume_size
+#     ec2_tag = var.linux.ec2_tag
+#     iam_instance_profile = module.iam_instance_profile.iam_instance_profile
+# }
+
+module "linux_asg" {
+  depends_on = [module.efs]
+  source = "../modules/asg"
+  launch_template_name = var.asg_linux.launch_template_name
+  volume_size = var.asg_linux.volume_size
+  volume_type = var.asg_linux.volume_type
+  delete_on_termination = var.asg_linux.delete_on_termination
+  instance_type = var.asg_linux.instance_type
+  ami_id = data.aws_ami.amazon_linux_2.id
+  security_group = [module.app-sg.sg_id]
+  key_name = var.asg_linux.key_name
+  iam_instance_profile = module.iam_instance_profile.iam_instance_profile
+  autoscaling_group_name = var.asg_linux.autoscaling_group_name
+  max_size = var.asg_linux.max_size
+  min_size = var.asg_linux.min_size
+  desired_capacity = var.asg_linux.desired_capacity
+  subnet_ids = var.asg_linux.subnet_ids
+  target_group_arns = module.target_group.target_group_arn
+  ec2_tag = var.asg_linux.ec2_tag
+  scaling_policy_name = var.asg_linux.scaling_policy_name
+  threshold_value = var.asg_linux.threshold_value
+  efs_id = module.efs.efs_id
+
 }
 
 module "windows_ec2" {
@@ -91,4 +116,12 @@ module "linux_patch" {
   baseline_name = var.linux_patch.baseline_name
   approved_patches = var.linux_patch.approved_patches
   rejected_patches = var.linux_patch.rejected_patches
+}
+
+module "efs" {
+  source = "../modules/efs"
+  security_group_id = module.app-sg.sg_id
+  vpc_id = var.efs.vpc_id
+  subnet_ids = var.efs.subnet_ids
+  efs_name = var.efs.efs_name
 }
