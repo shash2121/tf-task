@@ -1,4 +1,6 @@
-- Switch directory to appbuild.
+- login to terraform-ec2 instance using ec2-instance connect.
+
+- Switch directory to tf-task/appbuild
 
 - Run commands:
  
