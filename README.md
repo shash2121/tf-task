@@ -41,5 +41,5 @@ Update [14 Oct]:
 
 - Created ASG for the linux instances.
 - The user-data specified in the ASG will autmatically mount the EFS on the instances in the 
-/home/ubuntu/efs directory.
+/home/ec2-user/efs directory.
 - This process is automated which means if additional instances are added to ASG, then also EFS will be mounted on them.
